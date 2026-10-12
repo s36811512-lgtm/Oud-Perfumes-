@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجري - Firebase Store</title>
+    <title>عود للعطور - إدارة أبو أحمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #25D366;
@@ -21,23 +22,36 @@
             padding: 20px;
         }
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('shop.jpg') center/cover no-repeat;
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        header p {
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
         .admin-btn {
-            background-color: #333;
+            background-color: rgba(255, 255, 255, 0.2);
             color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            border: 1px solid #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
             font-family: inherit;
+            transition: background 0.3s;
+        }
+        .admin-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
         }
         #adminPanel {
             display: none;
@@ -46,62 +60,85 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             margin-bottom: 20px;
-            border-right: 5px solid #333;
+            border-right: 5px solid #25D366;
         }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
         .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
-        .submit-btn { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; }
+        .submit-btn { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; width: 100%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .product-card { background-color: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; text-align: center; padding: 15px; }
         .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; }
         .product-title { font-size: 1.2rem; margin: 10px 0; }
         .product-price { font-size: 1.1rem; color: #d9534f; font-weight: bold; margin-bottom: 15px; }
         .whatsapp-btn { background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px; border-radius: 5px; font-weight: bold; display: inline-block; }
+        
+        .floating-wa {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .floating-wa i { font-size: 24px; }
+
         footer { margin-top: 40px; text-align: center; padding: 20px; background: #fff; border-radius: 8px; }
         .facebook-btn { background-color: var(--fb-color); color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; display: inline-block; }
     </style>
 </head>
 <body>
     <header>
-        <h1>متجري الإلكتروني</h1>
-        <button class="admin-btn" onclick="toggleAdmin()">الإدارة ⚙️</button>
+        <h1>عود للعطور</h1>
+        <p>إدارة أبو أحمد | تواصل: 01289508500</p>
+        <button class="admin-btn" onclick="toggleAdmin()">لوحة الإدارة ⚙️</button>
     </header>
 
     <section id="adminPanel">
-        <h2>لوحة إضافة منتج جديد (سحابي)</h2>
+        <h2>إضافة منتج جديد (رفع مباشر من الجهاز)</h2>
         <form id="addProductForm" onsubmit="handleAddProduct(event)">
             <div class="form-group">
-                <label for="pTitle">اسم المنتج:</label>
+                <label for="pTitle">اسم العطر / المنتج:</label>
                 <input type="text" id="pTitle" required>
             </div>
             <div class="form-group">
-                <label for="pPrice">السعر (بالجنية):</label>
+                <label for="pPrice">السعر (بالجنيه):</label>
                 <input type="number" id="pPrice" required>
             </div>
             <div class="form-group">
-                <label for="pImage">رابط صورة المنتج (URL):</label>
-                <input type="url" id="pImage" required>
+                <label for="pImageFile">صورة المنتج من الهاتف:</label>
+                <input type="file" id="pImageFile" accept="image/*" required>
             </div>
-            <button type="submit" class="submit-btn">حفظ المنتج في السحابة</button>
+            <button type="submit" class="submit-btn">حفظ ونشر المنتج بالسحابة</button>
         </form>
     </section>
 
     <main class="product-grid" id="productGrid">
-        <p style="text-align: center; grid-column: 1/-1;">جاري تحميل المنتجات من السحابة...</p>
+        <p style="text-align: center; grid-column: 1/-1;">جاري تحميل العطور من السحابة...</p>
     </main>
 
+    <a href="#" id="floatingWaBtn" target="_blank" class="floating-wa">
+        <i class="fab fa-whatsapp"></i>
+        <span>تواصل معنا</span>
+    </a>
+
     <footer>
-        <p>تواصل معنا:</p>
-        <a href="https://facebook.com/YOUR_PAGE_LINK" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
+        <p>تابعنا على منصات التواصل الاجتماعي:</p>
+        <a href="https://facebook.com" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
     </footer>
 
-    <!-- سكربتات فايربيز للـ CDN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // بيانات الربط الخاصة بك
         const firebaseConfig = {
           apiKey: "AIzaSyDGdiCLkrqDXc06qKuUpmIvZwFRr3DDgm0",
           authDomain: "new-project-81723.firebaseapp.com",
@@ -115,8 +152,10 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        
+        const whatsappNumber = "201289508500"; 
+        document.getElementById('floatingWaBtn').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("مرحباً أبو أحمد، أود الاستفسار عن العطور المتوفرة لديكم.")}`;
 
-        const whatsappNumber = "201000000000"; // استبدل برقمك الفعلي
         let isAdminLoggedIn = false;
 
         async function fetchProducts() {
@@ -126,21 +165,21 @@
                 grid.innerHTML = '';
                 
                 if (querySnapshot.empty) {
-                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">لا توجد منتجات حالياً. أضف منتجات من لوحة الإدارة.</p>';
+                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">لا توجد عطور مضافة حالياً. افتح لوحة الإدارة وأضف منتجك الأول.</p>';
                     return;
                 }
 
                 querySnapshot.forEach((doc) => {
                     const p = doc.data();
-                    const message = encodeURIComponent(`مرحباً، أود طلب المنتج الآتي:\n- الاسم: ${p.title}\n- السعر: ${p.price} جنيه`);
+                    const message = encodeURIComponent(`مرحباً أبو أحمد، أود طلب العطر الآتي:\n- الاسم: ${p.title}\n- السعر: ${p.price} جنيه`);
                     const waLink = `https://wa.me/${whatsappNumber}?text=${message}`;
                     
                     const cardHTML = `
                         <div class="product-card">
-                            <img src="${p.image}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/250?text=لا+توجد+صورة'">
+                            <img src="${p.image}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/250?text=عطور+أبو+أحمد'">
                             <h3 class="product-title">${p.title}</h3>
                             <div class="product-price">${p.price} ج.م</div>
-                            <a href="${waLink}" target="_blank" class="whatsapp-btn">إكمال الطلب عبر الواتساب</a>
+                            <a href="${waLink}" target="_blank" class="whatsapp-btn">اطلب عبر الواتساب</a>
                         </div>
                     `;
                     grid.innerHTML += cardHTML;
@@ -171,27 +210,34 @@
             event.preventDefault();
             const title = document.getElementById('pTitle').value;
             const price = document.getElementById('pPrice').value;
-            const image = document.getElementById('pImage').value;
+            const fileInput = document.getElementById('pImageFile');
+            
+            if (fileInput.files.length === 0) return;
+            const file = fileInput.files[0];
 
-            try {
-                await addDoc(collection(db, "products"), {
-                    title: title,
-                    price: price,
-                    image: image,
-                    createdAt: new Date()
-                });
-                document.getElementById('addProductForm').reset();
-                alert("تمت إضافة المنتج إلى السحابة بنجاح!");
-                fetchProducts();
-            } catch (error) {
-                console.error("خطأ في الإضافة: ", error);
-                alert("حدث خطأ أثناء حفظ المنتج.");
-            }
+            com/
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Image = e.target.result;
+                try {
+                    await addDoc(collection(db, "products"), {
+                        title: title,
+                        price: price,
+                        image: base64Image,
+                        createdAt: new Date()
+                    });
+                    document.getElementById('addProductForm').reset();
+                    alert("تمت إضافة العطر بنجاح وتخزينه سحابياً!");
+                    fetchProducts();
+                } catch (error) {
+                    console.error("خطأ في الإضافة: ", error);
+                    alert("حدث خطأ أثناء حفظ المنتج.");
+                }
+            };
+            reader.readAsDataURL(file);
         }
 
-        // تحميل المنتجات عند فتح الصفحة
         fetchProducts();
     </script>
 </body>
-              </html>
-              
+</html>
