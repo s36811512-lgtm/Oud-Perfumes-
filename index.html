@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عود للعطور - إدارة أبو أحمد</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة الأيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --primary-color: #25D366;
@@ -20,6 +21,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
+            padding-bottom: 80px; /* مساحة لزر الواتساب العائم */
         }
         header {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('shop.jpg') center/cover no-repeat;
@@ -73,23 +75,28 @@
         .product-price { font-size: 1.1rem; color: #d9534f; font-weight: bold; margin-bottom: 15px; }
         .whatsapp-btn { background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px; border-radius: 5px; font-weight: bold; display: inline-block; }
         
+        /* أيقونة الواتساب العائمة الاحترافية */
         .floating-wa {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            right: 20px; /* تم نقلها لليمين لسهولة الضغط باليد */
             background-color: var(--primary-color);
-            color: white;
+            color: white !important;
             border-radius: 50px;
-            padding: 12px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 12px 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             text-decoration: none;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 10px;
-            z-index: 1000;
+            z-index: 9999;
+            transition: transform 0.2s;
         }
-        .floating-wa i { font-size: 24px; }
+        .floating-wa:active {
+            transform: scale(0.95);
+        }
+        .floating-wa i { font-size: 26px; }
 
         footer { margin-top: 40px; text-align: center; padding: 20px; background: #fff; border-radius: 8px; }
         .facebook-btn { background-color: var(--fb-color); color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; display: inline-block; }
@@ -125,14 +132,16 @@
         <p style="text-align: center; grid-column: 1/-1;">جاري تحميل العطور من السحابة...</p>
     </main>
 
-    <a href="#" id="floatingWaBtn" target="_blank" class="floating-wa">
+    <!-- زر الواتساب العائم المباشر -->
+    <a href="https://wa.me/201289508500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A3%D8%A8%D9%88%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B9%D8%B7%D9%88%D8%B1%20%D8%A7%D9%84%D9%85%D8%AA%D9%88%D9%81%D8%B1%D8%A9" target="_blank" class="floating-wa">
         <i class="fab fa-whatsapp"></i>
         <span>تواصل معنا</span>
     </a>
 
     <footer>
         <p>تابعنا على منصات التواصل الاجتماعي:</p>
-        <a href="https://facebook.com" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
+        <!-- ضع رابط صفحتك على الفيسبوك مكان الرابط بالأسفل -->
+        <a href="https://facebook.com/YOUR_FACEBOOK_PAGE" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
     </footer>
 
     <script type="module">
@@ -154,8 +163,6 @@
         const db = getFirestore(app);
         
         const whatsappNumber = "201289508500"; 
-        document.getElementById('floatingWaBtn').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("مرحباً أبو أحمد، أود الاستفسار عن العطور المتوفرة لديكم.")}`;
-
         let isAdminLoggedIn = false;
 
         async function fetchProducts() {
@@ -215,7 +222,6 @@
             if (fileInput.files.length === 0) return;
             const file = fileInput.files[0];
 
-            com/
             const reader = new FileReader();
             reader.onload = async function(e) {
                 const base64Image = e.target.result;
@@ -240,4 +246,5 @@
         fetchProducts();
     </script>
 </body>
-</html>
+    </html>
+    
