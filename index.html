@@ -79,7 +79,7 @@
         .floating-wa {
             position: fixed;
             bottom: 20px;
-            right: 20px; /* تم نقلها لليمين لسهولة الضغط باليد */
+            right: 20px;
             background-color: var(--primary-color);
             color: white !important;
             border-radius: 50px;
@@ -133,15 +133,15 @@
     </main>
 
     <!-- زر الواتساب العائم المباشر -->
-    <a href="https://wa.me/201289508500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A3%D8%A8%D9%88%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B9%D8%B7%D9%88%D8%B1%20%D8%A7%D9%84%D9%85%D8%AA%D9%88%D9%81%D8%B1%D8%A9" target="_blank" class="floating-wa">
+    <a href="https://wa.me/201289508500?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A3%D8%A8%D9%88%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8B%20%D8%A7%D9%84%D8%B9%D8%B7%D9%88%D8%B1%20%D8%A7%D9%84%D9%85%D8%AA%D9%88%D9%81%D8%B1%D8%A9" target="_blank" class="floating-wa">
         <i class="fab fa-whatsapp"></i>
         <span>تواصل معنا</span>
     </a>
 
     <footer>
         <p>تابعنا على منصات التواصل الاجتماعي:</p>
-        <!-- ضع رابط صفحتك على الفيسبوك مكان الرابط بالأسفل -->
-        <a href="https://facebook.com/YOUR_FACEBOOK_PAGE" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
+        <!-- يمكنك تغيير رابط صفحة الفيسبوك هنا إذا أردت -->
+        <a href="https://facebook.com/OudPerfumesAbuAhmed" target="_blank" class="facebook-btn">صفحتنا على الفيسبوك</a>
     </footer>
 
     <script type="module">
@@ -224,21 +224,36 @@
 
             const reader = new FileReader();
             reader.onload = async function(e) {
-                const base64Image = e.target.result;
-                try {
-                    await addDoc(collection(db, "products"), {
-                        title: title,
-                        price: price,
-                        image: base64Image,
-                        createdAt: new Date()
-                    });
-                    document.getElementById('addProductForm').reset();
-                    alert("تمت إضافة العطر بنجاح وتخزينه سحابياً!");
-                    fetchProducts();
-                } catch (error) {
-                    console.error("خطأ في الإضافة: ", error);
-                    alert("حدث خطأ أثناء حفظ المنتج.");
-                }
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = async function() {
+                    // ضغط الصورة وتصغير أبعادها لضمان رفعها بسرعة
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500;
+                    const scaleFactor = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleFactor;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                    try {
+                        await addDoc(collection(db, "products"), {
+                            title: title,
+                            price: price,
+                            image: compressedBase64,
+                            createdAt: new Date()
+                        });
+                        document.getElementById('addProductForm').reset();
+                        alert("تمت إضافة العطر بنجاح وتخزينه سحابياً!");
+                        fetchProducts();
+                    } catch (error) {
+                        console.error("خطأ في الإضافة: ", error);
+                        alert("حدث خطأ أثناء حفظ المنتج.");
+                    }
+                };
             };
             reader.readAsDataURL(file);
         }
@@ -246,5 +261,5 @@
         fetchProducts();
     </script>
 </body>
-    </html>
+                          </html>
     
